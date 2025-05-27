@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	
+	<record id="pmet_portal_Sel" model="ir.sequence">
+		<field name="name">PMET Student Portal</field>
+		<field name="code">pmet.student</field>
+		<field name="prefix">PMETS</field>
+		<field name="padding">4</field>
+		<field name="company_id" eval="False"/>
+	</record>
+
+</odoo>

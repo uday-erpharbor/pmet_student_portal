@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_packing_tracker_admin,access.packing.tracker.admin,model_packing_tracker,,1,1,1,1
+access_academic_info_line_admin,access.academic.info.line.admin,model_academic_info_line,,1,1,1,1
+access_course_course_admin,access.course.course.admin,model_course_course,,1,1,1,1
+access_student_alumni_admin,access.student.alumni.admin,model_student_alumni,,1,1,1,1
+access_student_achievements_admin,access.student.achievements.admin,model_student_achievements,,1,1,1,1
