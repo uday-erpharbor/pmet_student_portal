@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- configured global filter fields in company view-->
+    <record id="view_res_company_global_form_sabin" model="ir.ui.view">
+        <field name="name">res.company.global.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_info']" position="after">
+                <page name="global_search_config" string="Global Search">
+                    <group col='3'>
+                        <group string='Sale Order'>
+                            <div class="col-12 col-lg-6 o_setting_box" id="global_search_configuration" style="margin-left: 26px; width:250%">
+                                <!-- <div class="text-muted">
+                                    Configured fields for search globally in search view filter.  
+                                </div> -->
+                                <field name="global_field_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_create': True}" placeholder='Select Fields Here'/>
+                            </div>
+                        </group>
+                        <group string='Invoice Order'>
+                            <div class="col-12 col-lg-6 o_setting_box" id="global_search_configuration" style="margin-left: 26px; width:250%">
+                                <!-- <div class="text-muted">
+                                    Configured fields for search globally in search view filter.  
+                                </div> -->
+                                <field name="global_inv_field_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_create': True}" placeholder='Select Fields Here'/>
+                            </div>
+                        </group>
+                        <group string='Purchase Order'>
+                            <div class="col-12 col-lg-6 o_setting_box" id="global_search_configuration" style="margin-left: 26px; width:225%">
+                                <!-- <div class="text-muted">
+                                    Configured fields for search globally in search view filter.  
+                                </div> -->
+                                <field name="global_po_field_ids" widget="many2many_tags" options="{'no_create_edit': True,'no_create': True}" placeholder='Select Fields Here'/>
+                            </div>
+                        </group>
+                    </group>
+                    
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

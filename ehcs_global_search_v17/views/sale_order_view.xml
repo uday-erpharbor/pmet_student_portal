@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Added global filter in sale order search view-->
+    <record id="view_sales_order_global_search_filter_sabin" model="ir.ui.view">
+        <field name="name">sale.order.global.search.filter.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search/field[@name='name']" position="before">
+                <field name="global_search"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_account_global_search_filter_sabin" model="ir.ui.view">
+        <field name="name">account.account.global.search.filter.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search/field[@name='name']" position="before">
+                <field name="global_search"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_purchase_global_search_filter_sabin" model="ir.ui.view">
+        <field name="name">purchase.order.global.search.filter.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search/field[@name='name']" position="before">
+                <field name="global_search"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_purchase_order_global_search_filter_sabin" model="ir.ui.view">
+        <field name="name">purchase.order.global.search.filter.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//search/field[@name='name']" position="before">
+                <field name="global_search"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
