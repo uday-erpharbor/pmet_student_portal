@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="simpro_field_inherit_product" model="ir.ui.view">
+        <field name="name">product.template.form.view</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="barcode" position="before">
+                <field name="x_simpro_product_id"/>
+                <field name="x_simpro_upc"/>
+                <field name="x_simpro_vendore_part_number"/>
+            </field>
+            <field name="type" position="after">
+                <field name="x_simpro_is_favorite" widget='boolean_toggle'/>
+                <field name="x_simpro_is_inventory" widget='boolean_toggle'/>
+                <field name="x_simpro_is_assets" widget='boolean_toggle'/>
+                <field name="x_simpro_search_terms"/>
+                <field name="x_simpro_trade_price"/>
+                <field name="x_simpro_display_order"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="simpro_field_inherit_product_category" model="ir.ui.view">
+        <field name="name">product.category.form.view</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="x_simpro_group_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="simpro_field_inherit_contact" model="ir.ui.view">
+        <field name="name">res.partner.form.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="x_simpro_contact_id"/>
+                <field name="x_simpro_company_fax"/>
+                <field name="x_simpro_types"  invisible='1'/>
+                <field name="is_customer"/>
+                <field name="is_vendor"/>
+                <field name="is_contact"/>
+                <field name="is_sites" />
+                <field name="is_contractor" />
+                <field name="simpro_id" invisible='is_sites != True'/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

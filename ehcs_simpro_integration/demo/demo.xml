@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="ir_cron_get_simpro_products" model="ir.cron">
+            <field name="name">Get Simpro Product</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_product_data()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_contact" model="ir.cron">
+            <field name="name">Get Simpro Contact(Customer)</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_contacts()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_vendors" model="ir.cron">
+            <field name="name">Get Simpro Vendors</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_vendors()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_contractor" model="ir.cron">
+            <field name="name">Get Simpro Contractor</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_contractor()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">0</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_con" model="ir.cron">
+            <field name="name">Get Simpro Cont</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_con()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_sites" model="ir.cron">
+            <field name="name">Get Simpro Sites</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_sites()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+
+        <record id="ir_cron_get_simpro_groups" model="ir.cron">
+            <field name="name">Get Simpro Groups</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_get_simpro_group()</field>
+            <field name="interval_number">100</field>
+            <field name="interval_type">days</field>
+        </record>
+    
+    </data>
+</odoo>

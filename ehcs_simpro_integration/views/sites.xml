@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="ehcs_plc_sites_form_view" model="ir.ui.view">
+		<field name="name">plc.sites.form</field>
+		<field name="model">plc.sites</field>
+		<field name="arch" type="xml">
+			<form name="sports">
+				<sheet>
+					<group col='2'>
+						<group>
+							<field name="name"/>
+							<field name="street_address"/>
+						</group>
+						<group>
+							<field name='customer_id'/>
+							<field name='contact_id'/>
+							<field name="zone"/>
+							<field name="city"/>
+							<field name="state_id"/>
+							<field name="zip"/>
+						</group>
+					</group>
+					<group col='2' string='Billing Information'>
+						<group>
+							<field name="billing_address"/>
+							<field name='siteid'/>
+						</group>
+						<group>
+							<field name="billing_city"/>
+							<field name="billing_state_id"/>
+							<field name="billing_zip_code"/>
+							<field name='country_id'/>
+						</group>
+					</group>
+					
+				</sheet>	
+			</form>
+		</field>
+	</record>
+
+	<record id="ehcs_plc_sites_list_view" model="ir.ui.view">
+        <field name="name">plc.sites.list</field>
+        <field name="model">plc.sites</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="street_address"/>
+                <field name="city"/>
+                <field name="state_id"/>
+                <field name="zip"/>
+            </list>
+        </field>
+    </record>
+
+	<record id="action_plc_sites" model="ir.actions.act_window">
+		<field name="name">Sites</field>
+		<field name="res_model">plc.sites</field>
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<menuitem id="menu_plc_main_site" name="Sites" action="action_plc_sites" 
+            sequence="31" parent='sale.product_menu_catalog'/>
+
+</odoo>
