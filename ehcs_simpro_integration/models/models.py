@@ -238,7 +238,11 @@ class ResPartner(models.Model):
 # ------------------inside code is for get data and uper side is for devloping----------------------------------------------------------------------------------------------
 
     def get_attachments(self, external_id, headers, customer_id, value):
-        print('\n\n value',value)
+        # headers = {
+        #     'Authorization': 'Bearer 37a421022e74dd11d9cfc1f000f9c6d88f8d8c2b',
+        #     'Content-Type': 'application/pdf'
+        # }
+
         if value == 'customer':
             attachemenrt_url = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/customers/{external_id}/attachments/files/'
         if value == 'vendors':
@@ -248,6 +252,7 @@ class ResPartner(models.Model):
         
         try:
             response = requests.get(attachemenrt_url, headers=headers)
+            print("\n\n response",response.headers)
             if response.status_code != 200:
                 raise Exception(f"Failed to get contacts: {response.text}")
             attachments = response.json()
@@ -259,27 +264,38 @@ class ResPartner(models.Model):
             attachment_id = attachment.get('ID')
             file_name = attachment.get('Filename')
             if value == 'customer':
-                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/customers/{external_id}/attachments/files/{attachment_id}'
+                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/customers/{external_id}/attachments/files/{attachment_id}?display=Base64'
             if value == 'vendors':
-                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/vendors/{external_id}/attachments/files/{attachment_id}'
+                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/vendors/{external_id}/attachments/files/{attachment_id}?display=Base64'
             if value == 'contractor':
-                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/contractors/{external_id}/attachments/files/{attachment_id}'
+                attachemenrt__ids = f'https://think-plc.simprosuite.com/api/v1.0/companies/0/contractors/{external_id}/attachments/files/{attachment_id}?display=Base64'
 
             response = requests.get(attachemenrt__ids, headers=headers)
             print(f"Downloading {file_name} | Size: {len(response.content)} bytes")
 
             if response.status_code != 200:
-                print(f"❌ Failed to download: {file_name}")
+                print(f"Failed to download: {file_name}")
                 continue
 
-            self.env['ir.attachment'].create({
+            result_json = response.json()
+            base64_data = result_json.get('Base64Data')
+            if not base64_data:
+                print(f"No Base64Data for: {file_name}")
+                continue
+
+            print('\n\n response',response)
+            print('\n\n headers',response.headers)
+
+            # print('\n\n content',response.content)
+            new_attachment = self.env['ir.attachment'].create({
                 'name': file_name,
                 'type': 'binary',
-                'datas': base64.b64encode(response.content),
+                'datas': base64_data,
                 'res_model': 'res.partner',
                 'res_id': customer_id,
                 'mimetype': 'application/pdf',
             })
+            print('\n\n new_attach',new_attachment)
 
     #for create child address of customer
     def _create_customer_address(self, parent_id, billing_address):
@@ -305,6 +321,7 @@ class ResPartner(models.Model):
         
         # === STEP 2: API endpoint for contacts ===
         contact_url = 'https://think-plc.simprosuite.com/api/v1.0/companies/0/customers/companies/'
+        
         headers = {
             'Authorization': f'Bearer {access_token}',
             'Accept': 'application/json',
@@ -312,7 +329,7 @@ class ResPartner(models.Model):
         
         #this is for which page of simpro and how many conatact you will get
         params = {
-            "pageSize": 200,
+            "pageSize": 1,
             "page": 1
             }
         
@@ -345,18 +362,18 @@ class ResPartner(models.Model):
             if not customer_name:
                 continue
             # print('\nn kokok')
-            existing = self.env['res.partner'].search([('email', '=', data.get('Email')), ('x_simpro_contact_id','=', external_id)], limit=1)
+            # existing = self.env['res.partner'].search([('email', '=', data.get('Email')), ('x_simpro_contact_id','=', external_id)], limit=1)
             country_id = country.search([("name",'=',addresh.get('Country'))]) 
             # print('\n\n csdsd',country_id)
-            if existing:
-                print("Customer Already Created",existing)
-                continue
+            # if existing:
+            #     print("Customer Already Created",existing)
+            #     continue
             
             values = {
                 'x_simpro_types' : 'customer',
                 'is_customer' : 1,
                 'company_type' : 'company',
-                'name': data.get('CompanyName'),
+                'name': 'uday-balas',
                 'email': data.get('email'),
                 'phone': data.get('phone'),
                 'street': addresh.get('Address'),
@@ -373,8 +390,8 @@ class ResPartner(models.Model):
             self.get_attachments(external_id,headers,cus.id,'customer')
          
             ##create customer address
-            if billing_address:
-                self._create_customer_address(cus.id, billing_address)
+            # if billing_address:
+            #     self._create_customer_address(cus.id, billing_address)
 
             print('\n\n customer created',cus)
             
@@ -538,8 +555,8 @@ class ResPartner(models.Model):
             'Accept': 'application/json',
         }
         params = {
-            "pageSize": 100,
-            "page": 1
+            "pageSize": 250,
+            "page": 2
             }
         try:
             response = requests.get(site_url, headers=headers, params=params)
@@ -606,6 +623,8 @@ class ResPartner(models.Model):
             if billing_address.get('Address') or billing_address.get('City'):
                 self._create_customer_address(odoo_site.id, billing_address)
 
+
+#-----------------------------------------------------------------------------------------------
 #this is for contractor ------------------------------------------------------------------------
 
     #create primary contact for contractor

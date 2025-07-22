@@ -1,10 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+      <record id="think_plc_inherit_search_partner" model="ir.ui.view">
+        <field name="name">res.partner.search.view.inherite</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+           <xpath expr="//search/filter[1]" position="after">
+              <separator/>
+              <filter name="is_customer" domain="[('is_customer', '!=', False)]" 
+                 string="Customer"/>
+              <filter name="is_vendor" domain="[('is_vendor', '!=', False)]" 
+                 string="Vendors"/>   
+              <filter name="is_contact" domain="[('is_contact', '!=', False)]" 
+                 string="Contacts"/>
+              <filter name="is_sites" domain="[('is_sites', '!=', False)]" 
+                 string="Sites"/>  
+              <filter name="is_contractor" domain="[('is_contractor', '!=', False)]" string="Contractor"/> 
+               <separator/>
+           </xpath> 
+        </field>   
+      </record>
+
       <record id="think_plc_action_customers_form" model="ir.actions.act_window">
             <field name="name">Customers</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="context">{'res_partner_search_mode': 'customer', 'default_is_customer':1}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="domain">[('is_customer', '=', True)]</field>
@@ -20,7 +41,7 @@
       <record id="think_plc_action_contractor_form" model="ir.actions.act_window">
             <field name="name">Contractor</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="context">{'res_partner_search_mode': 'customer', 'default_is_contractor':1}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="domain">[('is_contractor', '=', True)]</field>
@@ -34,9 +55,9 @@
       </record>
 
       <record id="think_plc_action_sites_form" model="ir.actions.act_window">
-            <field name="name">Customers</field>
+            <field name="name">Sites</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="context">{'res_partner_search_mode': 'customer', 'default_is_sites':1}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="domain">[('is_sites', '=', True)]</field>
@@ -52,7 +73,7 @@
       <record id="think_plc_action_contact_form" model="ir.actions.act_window">
             <field name="name">Contacts</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="context">{'res_partner_search_mode': 'customer', 'default_is_contact':1}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="domain">[('is_contact', '=', True)]</field>
@@ -68,7 +89,7 @@
       <record id="think_plc_action_vendors_form" model="ir.actions.act_window">
             <field name="name">Vendors</field>
             <field name="res_model">res.partner</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
             <field name="context">{'res_partner_search_mode': 'customer',  'default_is_vendor':1}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="domain">[('is_vendor', '=', True)]</field>
