@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <form>
+        <!-- readonly should give: -->
+        <!-- (field1 == 'yes' and field2 != parent.some_field) or (field3 == uid or 'some-string'.lower() in field4.lower()) or 'yes' not in field5 and field6 == 'yes' -->
+        <field string="foo" invisible="True" readonly="(field1 == 'yes' and field2 != parent.some_field) or (field3 == uid or field4.lower() == 'some-string'.lower()) or 'yes' not in field5 and field6 == 'yes'" required="field in ['a', 'b', 'c'] and (some_field in [None, False] or otherfield == some_field)" column_invisible="0" name="name"/>
+        <xpath expr="//." position="attributes">
+            <!--TODO: Result from 'attrs' -> 'invisible' conversion without also overriding 'states' attribute
+                 Check if this tag contained a states attribute in any of the parent views, in which case it should be combined into this 'invisible' attribute
+                 (If any states attributes existed in parent views, they'll also be marked with a TODO)-->
+            <attribute name="invisible">True</attribute>
+            <attribute name="readonly">otherfield == 'yes'</attribute>
+            <attribute name="required">field in ['a', 'b', 'c']</attribute>
+            <attribute name="column_invisible">0</attribute>
+        </xpath>
+        <!-- all leafs should evaluate to '[not] <some|other>' -->
+        <xpath expr="//field[@name='test1']" position="attributes">
+            <!--TODO: Result from 'attrs' -> 'invisible' conversion without also overriding 'states' attribute
+                 Check if this field tag contained a states attribute in any of the parent views, in which case it should be combined into this 'invisible' attribute
+                 (If any states attributes existed in parent views, they'll also be marked with a TODO)-->
+            <attribute name="invisible">not some and other</attribute>
+            <attribute name="readonly">some and not other</attribute>
+            <attribute name="required">not some and other</attribute>
+            <attribute name="column_invisible">some == 'str' and other != 'str'</attribute>
+            <attribute name="indent_test"/>
+        </xpath>
+        <!-- field tag with both attrs (invisible, readonly) and states -->
+        <!--TODO: Result from merging "states='draft,done'" attribute with an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <field name="test1" invisible="True or state not in ['draft', 'done']" readonly="True"/>
+        <!-- field tag with both attrs (readonly, required) and states, with a double required attribute -->
+        <!--TODO: Result from converting "states='draft,done'" attribute into an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <field name="test2" invisible="state not in ['draft', 'done']" readonly="True" required="True or (otherfield == 'yes')"/>
+        <!-- field tag with only attrs (invisible, readonly)-->
+        <field name="test3" invisible="True" readonly="True"/>
+        <!-- field tag with only attrs (readonly) -->
+        <field name="test4" readonly="True"/>
+        <!-- field tag with only states -->
+        <!--TODO: Result from converting "states='draft,done'" attribute into an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <field name="test5" invisible="state not in ['draft', 'done']"/>
+        <!-- non-field tag with both attrs (invisible) and states -->
+        <!--TODO: Result from merging "states='draft,done'" attribute with an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <group name="test6" invisible="True or state not in ['draft', 'done']"/>
+        <!-- non-field tag with only attrs -->
+        <group name="test7" invisible="True"/>
+        <!-- non-field tag with only states -->
+        <!--TODO: Result from converting "states='draft,done'" attribute into an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <group name="test8" invisible="state not in ['draft', 'done']"/>
+        <!-- test conversion of special characters-->
+        <field name="test9" readonly="a &gt; 0 and b &lt; 0 and c &gt; 0"/>
+        <!-- xpath override of field with both attrs (invisible) and states -->
+        <xpath expr="//field[@name='test5']" position="attributes">
+            <attribute name="invisible">(test1 in [1, 2, 3] and test2 in [2, 3, 4]) or test3 == 'hello' or test4 in [%(testmodule.test_xml_id)d, %(testmodule.test_xml_id_2)d] or state not in ['draft', 'done']</attribute>
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['required', 'readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="required"/>
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of field with both attrs (required, invisible) and states and double required attribute -->
+        <xpath expr="//field[@name='test6']">
+            <attribute name="required">True or (True)</attribute>
+            <attribute name="invisible">testfield == 'hello world' or state not in ['draft', 'done']</attribute>
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of field with only attrs (invisible) -->
+        <xpath expr="//field[@name='test7']">
+            <!--TODO: Result from 'attrs' -> 'invisible' conversion without also overriding 'states' attribute
+                 Check if this field tag contained a states attribute in any of the parent views, in which case it should be combined into this 'invisible' attribute
+                 (If any states attributes existed in parent views, they'll also be marked with a TODO)-->
+            <attribute name="invisible">True</attribute>
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['required', 'readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="required"/>
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of field with only states -->
+        <xpath expr="//field[@name='test8']">
+            <!--TODO: Result from "states='draft,done'" -> 'invisible' conversion without also overriding 'attrs' attribute
+                 Check if this field tag contains an invisible attribute in any of the parent views, in which case it should be combined into this new 'invisible' attribute
+                 (Only applies to invisible attributes in the parent views that were not originally states attributes. Those from converted states attributes will be marked with a TODO)-->
+            <attribute name="invisible">state not in ['draft', 'done']</attribute>
+        </xpath>
+        <!-- xpath override of field with empty attrs and non-empty states -->
+        <xpath expr="//field[@name='test9']">
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['invisible', 'required', 'readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="invisible">state not in ['draft', 'done']</attribute>
+            <attribute name="required"/>
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of field with non-empty attrs (required, invisible) and empty states -->
+        <xpath expr="//field[@name='test10']">
+            <attribute name="indent_test"/>
+            <attribute name="required">True</attribute>
+            <attribute name="invisible">True</attribute>
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of field with empty attrs and empty states -->
+        <xpath expr="//field[@name='test11']">
+            <!--TODO: Result from converting 'attrs' attribute override without options for ['invisible', 'required', 'readonly', 'column_invisible'] to separate attributes
+                 Remove redundant empty tags below for any of those attributes that are not present in the field tag in any of the parent views
+                 If someone later adds one of these attributes in the parent views, they would likely be unaware it's still overridden in this view, resulting in unexpected behaviour, which should be avoided-->
+            <attribute name="invisible"></attribute>
+            <attribute name="required"/>
+            <attribute name="readonly"/>
+            <attribute name="column_invisible"/>
+        </xpath>
+        <!-- xpath override of non-field with both attrs (invisible) and states -->
+        <xpath expr="//sheet/group[@name='test12']">
+            <attribute name="invisible">True or state not in ['draft', 'done']</attribute>
+        </xpath>
+        <!-- xpath override of non-field with only attrs (invisible) -->
+        <xpath expr="//sheet/group[@name='test13']">
+            <!--TODO: Result from 'attrs' -> 'invisible' conversion without also overriding 'states' attribute
+                 Check if this group tag contained a states attribute in any of the parent views, in which case it should be combined into this 'invisible' attribute
+                 (If any states attributes existed in parent views, they'll also be marked with a TODO)-->
+            <attribute name="invisible">True</attribute>
+        </xpath>
+        <!-- xpath override of non-field with only states -->
+        <xpath expr="//sheet/group[@name='test14']">
+            <!--TODO: Result from "states='draft,done'" -> 'invisible' conversion without also overriding 'attrs' attribute
+                 Check if this group tag contains an invisible attribute in any of the parent views, in which case it should be combined into this new 'invisible' attribute
+                 (Only applies to invisible attributes in the parent views that were not originally states attributes. Those from converted states attributes will be marked with a TODO)-->
+            <attribute name="invisible">state not in ['draft', 'done']</attribute>
+        </xpath>
+        <!-- field tag with only attrs (invisible) -->
+        <field name="test9" invisible="(test1 in [1, 2, 3] and test2 in [2, 3, 4]) or test3 == 'hello' or test4 in [%(testmodule.test_xml_id)d, %(testmodule.test_xml_id_2)d]"/>
+        <!-- non-field tag with only attrs (invisible) -->
+        <group name="test10" invisible="True"/>
+        <!-- Case given by odoo, single '|' with states - can cause bug while should be accepted -->
+        <!--TODO: Result from merging "states='draft,sent,sale'" attribute with an 'invisible' attribute
+             Manually combine states condition into any 'invisible' overrides in inheriting views as well-->
+        <button name="action_open_action_coupon_program" invisible="not allow_modification or state not in ['draft', 'sent', 'sale']" context="{'enable_add_temporary': 1}" class="btn btn-secondary" string="Actions" type="object"/>
+    </form>
+</odoo>
