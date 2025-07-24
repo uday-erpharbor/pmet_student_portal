@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="res_config_settings_eazy_n8n_form" model="ir.ui.view">
+            <field name="name">res.config.form.inherit.eazy.n8n</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//form" position="inside">
+            		<app data-string="eazyn8n" string="N8n Integration" name="ehcs_n8n_configuration">
+            			<block title="N8n Production URL" name="eazy_n8n_configuration">
+                			<div class="o_setting_right_pane" id="ms_team_meetings_settings">
+    	                        <div>
+    	                        <div class="content-group mt16">
+                                        <label for="production_url" class="o_light_label"/>
+                                        <br/>
+                                        <field name="production_url" style="width: 40%;"/>
+                                    </div>            	
+                        	   </div>
+                            </div>
+                        </block>
+            		</app>
+            	</xpath>    
+            </field>
+    </record>
+
+</odoo>
