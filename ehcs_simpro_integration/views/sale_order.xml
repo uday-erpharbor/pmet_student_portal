@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="think_plc_inherit_field_sale_order" model="ir.ui.view">
+        <field name="name">sale.order.think.form.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">       
+            <field name='partner_id' position='attributes'>
+                <attribute name='domain'>['|',('company_id','=',False),('company_id', 'parent_of', [company_id]),'|',('company_id','=',False),('company_id', 'parent_of', ''),('is_customer', '!=', False)]</attribute>
+            </field>
+            <field name='payment_term_id' position='after'>
+                <field name='x_studio_job_project_type'></field>
+                <field name='think_job_number'></field>
+                <field name='project_id'></field>
+            </field>
+            <field name='partner_shipping_id' position='after'>
+                <field name='site_id'></field>
+            </field>
+        </field>
+    </record>
+
+    <record id="think_plc_inherit_field_sale_order_Sp" model="ir.ui.view">
+        <field name="name">sale.order.think.form.view.invisible</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_project.view_order_form_inherit_sale_project"/>
+        <field name="arch" type="xml">       
+                <field name='project_id' position='attributes'>
+                    <attribute name='invisible'>1</attribute>
+                </field>
+        </field>
+    </record>
+
+    <record id="think_plc_inherit_field_account_move" model="ir.ui.view">
+        <field name="name">account.move.think.form.view</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">       
+            <field name='partner_id' position='attributes'>
+                <attribute name='domain'>[('company_id', 'in', (False, company_id)), '|', ('is_customer', '!=', False), ('is_sites', '!=', False)]</attribute>
+                <attribute name='context'>{                                             'res_partner_search_mode': (context.get('default_move_type', 'entry') in ('out_invoice', 'out_refund', 'out_receipt') and 'customer') or (context.get('default_move_type', 'entry') in ('in_invoice', 'in_refund', 'in_receipt') and 'supplier') or False, 'show_address': 1, 'default_is_company': True, 'show_vat': True, 'default_is_customer': True}</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="ehcs_sale_inherit_gropu_by" model="ir.ui.view">
+        <field name="name">sale.order.extended.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[@name='name']" position="after">
+                <field name="x_studio_job_project_type" string="Job / Project type"/>
+            </xpath>
+            <xpath expr="//search/group/filter[@name='order_month']" position="before">
+                 <filter string="Job / Project type" name="order_month" domain="[]" context="{'group_by': 'x_studio_job_project_type'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- <record id="think_plc_inherit_field_account_payment" model="ir.ui.view">
+        <field name="name">account.payment.think.form.view</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">       
+            <field name='partner_id' position='attributes'>
+                <attribute name='domain'>[('company_id', 'in', (False, company_id)), '|', ('is_customer', '!=', False), ('is_sites', '!=', False)]</attribute>
+                <attribute name='context'>{'default_is_company': True, 'default_is_customer': True}</attribute>
+            </field>
+        </field>
+    </record> -->
+
+    <!-- <record id="think_plc_inherit_field_crm_lead" model="ir.ui.view">
+        <field name="name">crm.lead.think.form.view</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">       
+            <field name='partner_id' position='attributes'>
+                <attribute name='domain'>['|',('company_id','=',False),('company_id', 'parent_of', [company_id]),'|',('company_id','=',False),('company_id', 'parent_of', ''),('is_contact', '!=', False)]</attribute>
+                <attribute name='context'>{                                         'default_name': contact_name,                                         'default_title': title,                                         'default_street': street,                                         'default_street2': street2,                                         'default_city': city,                                         'default_state_id': state_id,                                         'default_zip': zip,                                         'default_country_id': country_id,                                         'default_function': function,                                         'default_phone': phone,                                         'default_mobile': mobile,                                         'default_email': email_from,                                         'default_user_id': user_id,                                         'default_team_id': team_id,                                         'default_website': website,                                         'default_lang': lang_code,'show_vat': True,'default_is_contact': True}</attribute>
+            </field>
+        </field>
+    </record> -->
+
+</odoo>

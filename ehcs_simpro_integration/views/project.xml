@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="think_plc_inherit_field_project_project" model="ir.ui.view">
+        <field name="name">project.project.form.think.plc</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">       
+            <field name='user_id' position='before'>
+                <field name='x_studio_job_project_type'></field>
+                <field name='think_job_number'></field>
+            </field>
+        </field>
+    </record>
+    
+</odoo>

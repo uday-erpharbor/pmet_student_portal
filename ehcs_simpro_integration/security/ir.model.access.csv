@@ -1,2 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_plc_sites,access.plc.sites,model_plc_sites,,1,1,1,1
+access_product_miss_records,access.product.miss.records,model_product_miss_records,,1,1,1,1
+access_product_manufacturer,access.product.manufacturer,model_product_manufacturer,,1,1,1,1
+access_bom_category,access.bom.category,model_bom_category,,1,1,1,1
+access_think_project_type,access.think.project.type,model_think_project_type,,1,1,1,1
+access_thinkplc_assets,access.thinkplc.assets,model_thinkplc_assets,,1,1,1,1
+access_thinkplc_assets_type,access.thinkplc.assets.type,model_thinkplc_assets_type,,1,1,1,1

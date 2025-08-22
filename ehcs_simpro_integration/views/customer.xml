@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 	
-	<record id="plc_site_field_add" model="ir.ui.view">
+	<!-- <record id="plc_site_field_add" model="ir.ui.view">
 		<field name="name">res.partner.inherit</field>
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="base.view_partner_form"/>
@@ -9,7 +9,7 @@
 			<xpath expr="//notebook" position="inside">
 				<page string='Sites' invisible='is_contact != True'>
 					<field name="simpro_site_ids">
-                    	<list>
+                    	<list editable='bottom'>
                             <field name="name"/>
                             <field name="street" />
                             <field name="city" />
@@ -20,6 +20,6 @@
 				</page>	
 			</xpath>
 		</field>
-	</record>
+	</record> -->
 
 </odoo>

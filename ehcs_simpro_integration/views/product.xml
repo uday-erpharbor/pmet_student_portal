@@ -9,15 +9,16 @@
             <field name="barcode" position="before">
                 <field name="x_simpro_product_id"/>
                 <field name="x_simpro_upc"/>
-                <field name="x_simpro_vendore_part_number"/>
+                <!-- <field name="x_simpro_vendore_part_number"/> -->
             </field>
             <field name="type" position="after">
-                <field name="x_simpro_is_favorite" widget='boolean_toggle'/>
-                <field name="x_simpro_is_inventory" widget='boolean_toggle'/>
-                <field name="x_simpro_is_assets" widget='boolean_toggle'/>
+                <!-- <field name="x_simpro_is_favorite" widget='boolean_toggle'/> -->
+                <!-- <field name="x_simpro_is_inventory" widget='boolean_toggle'/> -->
+                <!-- <field name="x_simpro_is_assets" widget='boolean_toggle'/> -->
                 <field name="x_simpro_search_terms"/>
                 <field name="x_simpro_trade_price"/>
                 <field name="x_simpro_display_order"/>
+                <field name="x_simpro_manufacturer_id"/>
             </field>
         </field>
     </record>
@@ -42,13 +43,21 @@
                 <field name="x_simpro_contact_id"/>
                 <field name="x_simpro_company_fax"/>
                 <field name="x_simpro_types"  invisible='1'/>
-                <field name="is_customer"/>
-                <field name="is_vendor"/>
-                <field name="is_contact"/>
-                <field name="is_sites" />
-                <field name="is_contractor" />
+                <field name="is_customer" invisible='1'/>
+                <field name="is_vendor" invisible='1'/>
+                <field name="is_contact" invisible='1'/>
+                <field name="is_sites" invisible='1'/>
+                <field name="is_contractor" invisible='1'/>
                 <field name="simpro_id" invisible='is_sites != True'/>
             </field>
+            <xpath expr='//sheet/div[@name="button_box"]' position='inside'>
+                <div class="oe_button_box" name="button_box" invisible='count_sites == 0'>
+                    <button class="oe_stat_button" type="object" name="view_sites"
+                        icon="fa-pencil-square-o">
+                        <field string="sites" name="count_sites" widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
         </field>
     </record>
 

@@ -1,4 +1,12 @@
-# -*- coding: utf-8 -*-
-
 from . import sites
-from . import models
+from . import partner
+from . import res_config_setting
+from . import miss_product
+from . import manufacturer
+from . import bom_category
+from . import bom
+from . import project_type
+from . import crm_lead
+from . import sale
+from . import project
+from . import assets

@@ -1,22 +1,31 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "ehcs_simpro_integration",
+    'name': "EHCS Simpro Integration",
     'summary': "",
     'description': """""",
-    'author': "Erp Harbor",
-    'website': "https://www.yourcompany.com",
+    'author': "ERP Harbor",
+    'website': "http://www.erpharbor.com",
     'category': 'Uncategorized',
     'version': '18.0.1.0',
-    'depends': ['base','sale_management','purchase'],
+    'depends': ['base','sale_management','purchase','mrp', 'crm', 'sale_project','mail'],
     'data': [
         'security/ir.model.access.csv',
+        'data/payment_terms.xml',
+        'data/data.xml',
         'views/product.xml',
-        # 'views/sites.xml',
+        'views/menu.xml',
         'views/customer.xml',
-        'views/menu.xml'
+        'views/res_config_setting.xml',
+        'views/miss_product.xml',
+        'views/manufacturer.xml',
+        'views/bom_category.xml',
+        'views/bom.xml',
+        'views/lead.xml',
+        'views/project_type.xml',
+        'views/sale_order.xml',
+        'views/actions.xml',
+        'views/project.xml',
+        'views/sites.xml',
+        'views/assets.xml',
         ],
-    'demo': [
-        'demo/demo.xml',
-    ],
 }
-

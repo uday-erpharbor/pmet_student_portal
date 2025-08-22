@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="res_config_settings_view_form_thin_plc" model="ir.ui.view">
+            <field name="name">res.config.form.inherit.thin.plc</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//form" position="inside">
+            		<app data-string="simprodata" string="Simpro Integration" name="ehcs_simpro_integration">
+                        <block title="Add Url Here" name="simpro_url">
+                            <div class="o_setting_right_pane" id="ms_team_meetings_settings">
+                                <div>
+                                    <div class="content-group mt16">
+                                        <label for="access_token" class="o_light_label"/>
+                                        <br/>
+                                        <field name="access_token" style="width: 40%;"/>
+                                    </div>
+                                    <div class="content-group mt16">
+                                        <label for="company_url" class="o_light_label"/>
+                                        <br/>
+                                        <field name="company_url" style="width: 40%;" placeholder="https://think-plc.simprosuite.com/"/>
+                                    </div>
+                                    <div class="content-group mt16">
+                                        <label for="company" class="o_light_label"/>
+                                        <br/>
+                                        <field name="company" style="width: 40%;"/>
+                                    </div>
+                                    <div class="content-group mt16">
+                                        <label for="page_size" class="o_light_label"/>
+                                        <br/>
+                                        <field name="page_size" style="width: 40%;"/>
+                                    </div>
+                                    <div class="content-group mt16">
+                                        <label for="page" class="o_light_label"/>
+                                        <br/>
+                                        <field name="page" style="width: 40%;"/>
+                                    </div>            
+                               </div>
+                            </div>
+                        </block>
+            		</app>
+            	</xpath>    
+            </field>
+    </record>
+
+    <record id="action_thin_plc_simpro_integration" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form_thin_plc"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'ehcs_simpro_integration', 'bin_size': False}</field>
+    </record>
+
+    <record id="view_res_company_simpro" model="ir.ui.view">
+        <field name="name">res.company.simpro.field</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='branches']" position="after">
+                <page name="simpro_field" string="Simpro Integration">
+                    <group>
+                        <group>
+                            <field name="page_number"/>
+                        </group>    
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
