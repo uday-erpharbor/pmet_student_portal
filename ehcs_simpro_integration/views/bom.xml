@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="think_lc_added_field_bom" model="ir.ui.view">
+        <field name="name">mrp.bom.form.view</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="category_id"/>
+                <field name="x_simpro_group_id"/>
+            </field>
+
+            <xpath expr='//notebook' position='inside'>
+                <page string='Notes / Description'>
+                    <group name="description" string="Description">
+                        <field colspan="2" name="description" nolabel="1" placeholder="Description "/>
+                    </group>
+                    <group name="note" string="Note">
+                        <field colspan="2" name="note" nolabel="1" placeholder="Note"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="plc_bom_filter_add" model="ir.ui.view">
+        <field name="name">mrp.bom.search.view.inherit</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.view_mrp_bom_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/group" position="inside">
+                    <filter string="Category" name="bom_category" domain="[]" context="{'group_by': 'category_id'}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id='mrp.mrp_bom_form_action' model='ir.actions.act_window'>
+        <field name='context'>{'default_company_id': allowed_company_ids[0],'search_default_bom_category':1}</field>
+    </record>
+
+</odoo>

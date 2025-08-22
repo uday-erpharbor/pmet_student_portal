@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="ehcs_product_bom_category_form_view" model="ir.ui.view">
+		<field name="name">bom.category.form</field>
+		<field name="model">bom.category</field>
+		<field name="arch" type="xml">
+			<form name="sports">
+				<sheet>
+						<div class="oe_title">
+	                        <label for="name" string="Category"/>
+	                        <h1><field name="name" placeholder="e.g. Lamps"/></h1>
+                    	</div>
+						<group>
+							<field name="complete_name" invisible='1'/>
+							<!-- <field name="name"/> -->
+							<field name="parent_id"/>
+							<field name="x_simpro_id"/>
+						</group>
+				</sheet>	
+			</form>
+		</field>
+	</record>
+
+	<record id="ehcs_bom_category_list_view" model="ir.ui.view">
+        <field name="name">bom.category.list</field>
+        <field name="model">bom.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+				<field name="parent_id"/>
+				<field name="x_simpro_id"/>
+            </list>
+        </field>
+    </record>
+
+	<record id="action_bom_category" model="ir.actions.act_window">
+		<field name="name">Bom Category</field>
+		<field name="res_model">bom.category</field>
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<menuitem 
+		id="menu_bom_category" 
+		name="Bom Category" 
+		action="action_bom_category" 
+        sequence="31" 
+        parent='mrp.menu_mrp_configuration'
+        />
+
+</odoo>

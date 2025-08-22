@@ -7,34 +7,123 @@
 		<field name="arch" type="xml">
 			<form name="sports">
 				<sheet>
-					<group col='2'>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field options="{'line_breaks': False}" widget="text" class="text-break" name="name" default_focus="1" placeholder="e.g. Brandon Freeman" required='not is_site_address'/>
+                        </h1>
+                    </div>
+					<group>
 						<group>
-							<field name="name"/>
-							<field name="street_address"/>
-						</group>
-						<group>
-							<field name='customer_id'/>
-							<field name='contact_id'/>
-							<field name="zone"/>
-							<field name="city"/>
-							<field name="state_id"/>
-							<field name="zip"/>
-						</group>
+							<span class="o_form_label o_td_label o_address_type" name="address_name">
+                            <span>Address</span>
+                            </span>
+							<span>
+								<div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <div name="partner_address_country" class="d-flex justify-content-between">
+                                        <field name="country_id" placeholder="Country" class="o_address_country"/>
+                                    </div>
+                                </div>
+						     </span>
+                        </group>
+                        <group>
+                            <field name='customer_id'/>
+                            <field name='contact_id'/>
+                            <field name="zone"/>
+                            <field name="x_simpro_site_id"/>
+                        </group>
 					</group>
-					<group col='2' string='Billing Information'>
-						<group>
-							<field name="billing_address"/>
-							<field name='siteid'/>
-						</group>
-						<group>
-							<field name="billing_city"/>
-							<field name="billing_state_id"/>
-							<field name="billing_zip_code"/>
-							<field name='country_id'/>
-						</group>
-					</group>
-					
+					<notebook colspan="4">
+                        <page string="Addresses" name="contact_addresses" autofocus="autofocus">
+                            <field name="child_ids" mode="kanban" context="{'default_is_site_address': True}">
+                                <kanban>
+                                    <field name="id"/>
+                                    <field name="color"/>
+                                    <field name="name"/>
+                                    <!-- <field name="type"/> -->
+                                    <field name="parent_id"/>
+                                    <field name="is_site_address"/>
+                                    <field name="street"/>
+                                    <field name="street2"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                               
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <field name="comment"/>
+                                    <field name="display_name"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color">
+                                                <div class="o_kanban_image">
+                                          
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>        
+                                                    <div>
+                                                        <div>
+                                                            <field name="zip"/><t t-if="record.city"> </t>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <t t-if="record.country_id"> </t>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <t t-esc="record.phone.value"/></div>
+                                                    <div t-if="record.mobile.raw_value">Mobile: <t t-esc="record.mobile.value"/></div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Contact / Address">
+                                    <sheet>
+                                        <!-- <field name="type" required="1" widget="radio"/> -->
+                                        <field name="parent_id" invisible="1"/>
+                                               <group>
+	                                            <group>
+	                                                <field name="name" string="Contact Name"/> 
+	                                                <label for="street" string="Address"/>
+	                                                <div>
+	                                                    <div class="o_address_format" name="div_address">
+	                                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+	                                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+	                                                        <field name="city" placeholder="City" class="o_address_city"/>
+	                                                        <field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}" context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+	                                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+	                                                        <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+	                                                    </div>
+	                                                </div>
+	                                            </group>
+                                            <group>
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                                <field name="mobile" widget="phone"/>
+                                                <field name="is_site_address" invisible='1'/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="comment" placeholder="Internal notes..." nolabel="1" colspan="2"/>
+                                        </group>
+  
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Contacts" name="contact_addresses">
+                            <field name='contact_ids' context="{'default_is_contact': True}"/>
+                        </page>
+                        <page string="Customer Assets" name="contact_addresses">
+                            <field name='customer_assets_ids'/>
+                        </page>
+                    </notebook>
 				</sheet>	
+                <chatter/>
 			</form>
 		</field>
 	</record>
@@ -45,7 +134,6 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="street_address"/>
                 <field name="city"/>
                 <field name="state_id"/>
                 <field name="zip"/>
@@ -53,13 +141,74 @@
         </field>
     </record>
 
+    <record id="ehcs_plc_sites_search_view" model="ir.ui.view">
+        <field name="name">plc.sites.search</field>
+        <field name="model">plc.sites</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string='Site'/>
+                <field name="x_simpro_site_id" string='Simpro Id'/>
+                <field name='customer_id'/>
+                <field name='contact_id'/>
+                <separator/>        
+                <group expand="0" string="Group By...">
+                    <filter string="Customer" name="grp_sensder" context="{'group_by':'customer_id'}" />
+                    <filter string="Contacts" name="grp_sensder" context="{'group_by':'contact_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ehcs_plc_sites_kanban_view" model="ir.ui.view">
+        <field name="name">plc.sites.kanban</field>
+        <field name="model">plc.sites</field>
+        <field name="arch" type="xml">
+            <kanban string="Sites" class="o_kanban_small_column o_opportunity_kanban" sample="1" quick_create="false">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="city"/>
+                <field name="state_id"/>
+                <field name="country_id"/>
+                <field name="avatar_128"/>
+                <templates>
+
+                    <t t-name="kanban-box">
+                        
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div>                                                       
+                                <h3> <span class="o_text_overflow" t-if="record.name.value" t-esc="record.name.value"/></h3>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title"><field name="phone"/></strong>
+                            </div>
+                            <div>
+                                <span class="o_text_overflow" t-if="record.email.value" t-esc="record.email.value"/>
+                            </div>
+                            <div>
+                                <span class="o_text_overflow" t-if="record.city.value" t-esc="record.city.value"/>
+                            </div>
+                            <div>
+                                <span class="o_text_overflow" t-if="record.state_id.value" t-esc="record.state_id.value"/>
+                            </div>
+                            <div>
+                                <span class="o_text_overflow" t-if="record.country_id.value" t-esc="record.country_id.value"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
 	<record id="action_plc_sites" model="ir.actions.act_window">
 		<field name="name">Sites</field>
 		<field name="res_model">plc.sites</field>
-		<field name="view_mode">list,form</field>
+		<field name="view_mode">search,kanban,list,form</field>
+        <field name="domain">[('is_site_address','!=',True)]</field>
 	</record>
 
 	<menuitem id="menu_plc_main_site" name="Sites" action="action_plc_sites" 
-            sequence="31" parent='sale.product_menu_catalog'/>
+            sequence="31" parent='menu_simpro_data_get'/>
 
 </odoo>

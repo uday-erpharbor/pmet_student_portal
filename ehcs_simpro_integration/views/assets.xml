@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="think_plc_assets_form_view" model="ir.ui.view">
+		<field name="name">thinkplc.assets.form.view</field>
+		<field name="model">thinkplc.assets</field>
+		<field name="arch" type="xml">
+			<form name="sports">
+				<sheet>
+					<group>
+						<group>
+							<field name="asset_type_id"/>
+							<field name="site_id"/>
+							<field name="simpro_asset_id"/>
+							<field name="related_asset_id"/>
+						</group>
+					</group>
+				</sheet>
+				<chatter/>
+			</form>
+		</field>
+	</record>
+
+	<record id="think_plc_assets_list_view" model="ir.ui.view">
+        <field name="name">thinkplc.assets.list</field>
+        <field name="model">thinkplc.assets</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="asset_type_id"/>
+				<field name="site_id"/>
+				<field name="simpro_asset_id"/>
+				<field name="related_asset_id"/>
+            </list>
+        </field>
+    </record>
+
+	<record id="action_customer_assets" model="ir.actions.act_window">
+		<field name="name">Customer Assets</field>
+		<field name="res_model">thinkplc.assets</field>
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<menuitem 
+		id="menu_customer_assets" 
+		name="Customer Assets" 
+		action="action_customer_assets" 
+        sequence="31" 
+        parent='menu_simpro_data_get'
+        />
+
+
+<!-- Assets type -->
+    <record id="think_plc_assets_type_form_view" model="ir.ui.view">
+		<field name="name">thinkplc.assets.type.form.view</field>
+		<field name="model">thinkplc.assets.type</field>
+		<field name="arch" type="xml">
+			<form name="sports">
+				<sheet>
+					<group>
+						<group>
+							<field name="name"/>
+							<field name="simpro_id"/>
+						</group>
+					</group>
+				</sheet>	
+			</form>
+		</field>
+	</record>
+
+	<record id="think_plc_assets_type_list_view" model="ir.ui.view">
+        <field name="name">thinkplc.assets.type.list</field>
+        <field name="model">thinkplc.assets.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="simpro_id"/>
+            </list>
+        </field>
+    </record>
+
+	<record id="action_customer_assets_type" model="ir.actions.act_window">
+		<field name="name">Assets Type</field>
+		<field name="res_model">thinkplc.assets.type</field>
+		<field name="view_mode">list,form</field>
+	</record>
+
+	<menuitem 
+		id="menu_customer_assets_type" 
+		name="Assets Type" 
+		action="action_customer_assets_type" 
+        sequence="31" 
+        parent='sale.prod_config_main'
+        />
+
+</odoo>

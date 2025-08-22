@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id='account.res_partner_action_customer' model='ir.actions.act_window'>
+         <field name="context">{'search_default_customer': 1,'res_partner_search_mode': 'customer', 'default_is_company': True, 'default_customer_rank': 1, 'default_is_customer':1}</field>
+            <field name="domain">[('is_customer', '=', True)]</field>
+    </record>
+
+    <record id='contacts.action_contacts' model='ir.actions.act_window'>
+         <field name="context">{'default_is_company': True, 'default_is_contact':1, 'default_company_type':'company'}</field>
+            <field name="domain">[('is_contact', '=', True)]</field>
+    </record>
+
+    <record id='account.res_partner_action_supplier' model='ir.actions.act_window'>
+         <field name="context">{'search_default_supplier': 1,'res_partner_search_mode': 'supplier', 'default_is_company': True, 'default_supplier_rank': 1,'default_is_vendor':1}</field>
+            <field name="domain">[('is_vendor', '=', True)]</field>
+    </record>
+
+</odoo>

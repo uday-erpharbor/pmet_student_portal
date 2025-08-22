@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<record id="ehcs_product_miss_records_form_view" model="ir.ui.view">
+		<field name="name">product.miss.records.form</field>
+		<field name="model">product.miss.records</field>
+		<field name="arch" type="xml">
+			<form name="sports">
+				<sheet>
+					<group col='2'>
+						<group>
+							<field name="name"/>
+							<field name="simpro_id"/>
+							<field name="x_simpro_types"/>
+							<field name="product_price" invisible='x_simpro_types not in ("product")'/>
+							<field name="email" invisible='x_simpro_types in ("product","bom")'/>
+							<field name="reason" invisible='x_simpro_types not in ("bom")'/>
+						</group>
+					</group>
+				</sheet>	
+			</form>
+		</field>
+	</record>
+
+	<record id="ehcs_product_miss_records_list_view" model="ir.ui.view">
+        <field name="name">product.miss.records.list</field>
+        <field name="model">product.miss.records</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="x_simpro_types"/>
+                <field name="simpro_id"/>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_simpro_miss_records" model="ir.ui.view">
+        <field name="name">product.miss.records.search</field>
+        <field name="model">product.miss.records</field>
+        <field name="arch" type="xml">
+            <search string="Sample Product" >
+                <field name="x_simpro_types"/>
+                <field name="simpro_id"/>
+                <separator/>
+                <group expand="0" string="Group By...">
+                    <filter string="Type" name="simpro_type" context="{'group_by':'x_simpro_types'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+	<record id="action_product_miss_records" model="ir.actions.act_window">
+		<field name="name">Missing Records</field>
+		<field name="res_model">product.miss.records</field>
+		<field name="view_mode">list,form,search</field>
+        <field name="context">{"search_default_simpro_type":1}</field>
+	</record>
+
+	<menuitem 
+		id="menu_product_miss_records" 
+		name="Miss Records" 
+		action="action_product_miss_records" 
+        sequence="31" 
+        parent='sale.prod_config_main'
+        />
+
+</odoo>
