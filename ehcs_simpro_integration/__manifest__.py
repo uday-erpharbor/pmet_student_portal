@@ -6,14 +6,13 @@
     'author': "ERP Harbor",
     'website': "http://www.erpharbor.com",
     'category': 'Uncategorized',
-    'version': '18.0.1.0',
+    'version': '18.0.1.1',
     'depends': ['base','sale_management','purchase','mrp', 'crm', 'sale_project','mail'],
     'data': [
         'security/ir.model.access.csv',
         'data/payment_terms.xml',
         'data/data.xml',
         'views/product.xml',
-        'views/menu.xml',
         'views/customer.xml',
         'views/res_config_setting.xml',
         'views/miss_product.xml',
@@ -27,5 +26,6 @@
         'views/project.xml',
         'views/sites.xml',
         'views/assets.xml',
+        'views/menu.xml',
         ],
 }

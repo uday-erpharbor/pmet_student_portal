@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="cosmo_finished_product_specification_form">
+        <field name="name">finished.product.specification.form</field>
+        <field name="model">finished.product.specification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1" field_id="name_0"/>
+                            </h1>
+                        <br/>
+                    </div>
+                   <!--  <group col='1' string='Finished Product Specification'>
+                        <group>
+                            <field name='product_status'/>
+                        </group>
+                    </group>
+                    <group col='1' string='Revision Control'>
+                        <group>
+                            <field name='fps_version_number'/>
+                        </group>
+                    </group>
+                    <group string='Product &amp; Formulation' col='2'>
+                        <group>
+                            <field name='product_id'/>
+                            <field name='finished_goods_number'/>
+                            <field name='customer_id'/>
+                        </group>
+                        <group>
+                            <field name='product_being_packed'/>
+                            <field name='bom_id'/>
+                            <field name='formula_version_number'/>
+                        </group>
+                    </group>
+                    <group string='Lot &amp; Expiry' col='2'>
+                        <group>
+                            <field name='lot_location'/>
+                            <field name='file' widget='file'/>
+                        </group>
+                        <group>
+                            <field name='shelf_life'/>
+                            <field name='pao_months' invisible='shelf_life != "pao"'/>
+                            <field name='bbe_months' invisible='shelf_life != "bbe"'/>
+                        </group>
+                    </group>
+                    <group string='Packaging Details' col='2'>
+                        <group>
+                            <field name='primary_packing_component'/>
+                            <field name='secondary_packaging'/>
+                            <field name='not_applicable'/>
+                        </group>
+                        <group>
+                            <field name='component_id' invisible='not_applicable'/>
+                            <field name='unit_per_sc_packging' invisible='not_applicable'/>
+                            <field name='supplied_by'/>
+                            <field name='artwork' widget='file'/>
+                            <field name='notes' invisible='not_applicable'/>
+                        </group>
+                    </group>
+                    <group string='Tube' col='2' invisible='primary_packing_component != "tube"'>
+                        <group>
+                            <field name='tube_type'/>
+                            <field name='tube_type_addi_info'/>
+                            <field name='tube_fill_size'/>
+                            <field name='tube_diameter_mm'/>
+                            <field name='tube_height_mm'/>
+                            <field name='tube_color'/>
+                            <field name='tube_finish'/>
+                            <field name='tube_special_printing'/>
+                            <field name='tube_tamper_evidence'/>
+                        </group>
+                        <group>
+                            <field name='tube_orifice_size_mm'/>
+                            <field name='tube_cap_type'/>
+                            <field name='tube_oriented_cap' invisible='tube_cap_type not in ("flip_cap_so","flip_cap_po")'/>
+                            <field name='tube_cap_shape'/>
+                            <field name='tube_cap_colour'/>
+                            <field name='tube_cap_finish'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='tube_artwork' widget='file'/>
+                        </group>
+                        <group>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Bottle' col='2' invisible='primary_packing_component != "bottle"'>
+                        <group>
+                            <field name='bottle_material'/>
+                            <field name='bottle_diameter_mm'/>
+                            <field name='bottle_height_mm'/>
+                            <field name='bottle_colour'/>
+                            <field name='bottle_decoration_type'/>
+                            <field name='bottle_label_option' invisible='bottle_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='bottle_print_option' widget="radio" options="{'horizontal': true}" invisible='bottle_decoration_type != "printed"'/>
+                            <field name='bottle_app_type'/>
+                            <field name='bottle_label_supplier'/>
+                            <field name='bottle_label_finish'/>
+                        </group>
+                        <group>
+                            <field name='bottle_label_special_printing'/>
+                            <field name='bottle_label_artwork'/>
+                            <field name='bottle_finish'/>
+                            <field name='bottle_special_printing'/>
+                            <field name='bottle_artwork' widget='file'/>
+                            <field name='bottle_cap_material'/>
+                            <field name='bottle_cap_colour'/>
+                            <field name='bottle_tamper_evidence'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Breath Spray' col='2' invisible='primary_packing_component != "breath_spray"'>
+                        <group>
+                            <field name='bs_spray_bottle_material'/>
+                            <field name='bs_spray_bottle_diameter'/>
+                            <field name='bs_spray_bottle_height'/>
+                            <field name='bs_spray_bottle_colour'/>
+                            <field name='bs_decoration_type'/>
+                            <field name='bs_label_option' invisible='bs_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='bs_print_option' invisible='bs_decoration_type != "printed"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='bs_app_type'/>
+                            <field name='bs_label_supplier'/>
+                            <field name='bs_size'/>
+                            <field name='bs_label_finish'/>
+                            <field name='bs_label_special_printing'/>
+                        </group>
+                        <group>
+                            <field name='bs_label_artwork'/>
+                            <field name='bs_finish'/>
+                            <field name='bs_special_printing'/>
+                            <field name='bs_artwork' widget='file'/>
+                            <field name='cap_if_app'/>
+                            <field name='cap_mat_if_app'/>
+                            <field name='cap_col_if_app'/>
+                            <field name='tamper_evidence'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Jar / Tin' col='2' invisible='primary_packing_component != "jar_tin"'>
+                        <group>
+                            <field name='jt_fill_size_gram'/>
+                            <field name='jt_diameter_mm'/>
+                            <field name='jt_height_mm'/>
+                            <field name='jt_colour'/>
+                            <field name='jt_finish'/>
+                            <field name='jt_decoration_type'/>
+                            <field name='jt_label_option' invisible='jt_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='jt_print_option' invisible='jt_decoration_type != "printed"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='jt_app_type'/>
+                            <field name='jt_label_supplier'/>
+                        </group>
+                        <group>
+                            <field name='jt_label_size'/>
+                            <field name='jt_label_finish'/>
+                            <field name='jt_label_special_printing'/>
+                            <field name='jt_label_artwork' widget='file'/>
+                            <field name='jt_print_finish'/>
+                            <field name='jt_special_printing'/>
+                            <field name='jt_artwork' widget='file'/>
+                            <field name='dessicant_required'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Pouch' col='2' invisible='primary_packing_component != "pouch"'>
+                        <group>
+                            <field name='pouch_fillsize'/>
+                            <field name='pouch_type'/>
+                            <field name='pouch_height'/>
+                            <field name='pouch_width'/>
+                            <field name='pouch_finish'/>
+                            <field name='pouch_material'/>
+                            <field name='pouch_decoration_type'/>
+                            <field name='pouch_label_option' invisible='pouch_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='pouch_print_option' invisible='pouch_decoration_type != "printed"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='pouch_app_type'/>
+                            <field name='pouch_label_supplier'/>
+                        </group>
+                        <group>
+                            <field name='pouch_label_size'/>
+                            <field name='pouch_print_finish'/>
+                            <field name='pouch_special_printing'/>
+                            <field name='pouch_label_artwork' widget='file'/>
+                            <field name='pouch_print_finish'/>
+                            <field name='pouch_special_printing'/>
+                            <field name='pouch_artwork' widget='file'/>
+                            <field name='dessicant_required'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Syringe' col='2' invisible='primary_packing_component != "syringe"'>
+                        <group>
+                            <field name='sr_fillsize'/>
+                            <field name='sr_barrel_colour'/>
+                            <field name='sr_plunger_colour'/>
+                            <field name='sr_decoration_type'/>
+                            <field name='sr_label_option' invisible='sr_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='sr_print_option' invisible='sr_decoration_type != "printed"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='sr_label_supplier'/>
+                            <field name='sr_label_size'/>
+                        </group>
+                        <group>    
+                            <field name='sr_print_finish'/>
+                            <field name='sr_spec_print'/>
+                            <field name='sr_label_artwork'/>
+                            <field name='sr_spec_printing'/>
+                            <field name='sr_print_syr_artwork'/>
+                        </group>
+                    </group>
+                    <group string='Pen' col='2' invisible='primary_packing_component != "pen"'>
+                        <group>
+                            <field name='pen_fillsize'/>
+                            <field name='pen_barrel_colour'/>
+                            <field name='pen_lid_colour'/>
+                            <field name='pen_tip_type'/>
+                            <field name='pen_spec_print'/>
+                        </group>
+                        <group>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='pen_artwork' widget='file'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Dropper Bottle' col='2' invisible='primary_packing_component != "dropper_bottel"'>
+                        <group>
+                            <field name='db_bottel_material'/>
+                            <field name='db_diameter_mm'/>
+                            <field name='db_height_mm'/>
+                            <field name='db_bottle_colour'/>
+                            <field name='db_decoration_type'/>
+                            <field name='db_label_option' invisible='db_decoration_type != "label"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='db_print_option' invisible='db_decoration_type != "printed"' widget="radio" options="{'horizontal': true}"/>
+                            <field name='db_app_type'/>
+                            <field name='db_label_supplier'/>
+                            <field name='db_label_size'/>
+                            <field name='db_bl_print_finish'/>
+                            <field name='db_b_spec_print'/>
+                        </group>
+                        <group>
+                            <field name='db_b_label_artwork'/>
+                            <field name='db_print_finish'/>
+                            <field name='db_spec_print'/>
+                            <field name='db_label_artwork'/>
+                            <field name='db_cap_material'/>
+                            <field name='db_cap_colour'/>
+                            <field name='db_tamper_evidence'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group> -->
+                    <!-- <hr/> -->
+                    <!-- <group col='2'>
+                        <group>
+                            <field name='tp_component'/>
+                            <field name='tp_unit_per_packging'/>
+                            <field name='tp_supplied_by'/>
+                            <field name='tp_notes'/>
+                        </group>
+                        <group>
+                            <field name='tp_package_label' widget="radio" options="{'horizontal': true}"/>
+                            <field name='tp_app_details' invisible="tp_package_label == 'not_applicable'"/>
+                            <field name='tp_artwork' invisible="tp_package_label == 'not_applicable'" widget='file'/>
+                        </group>
+                    </group>
+                    <hr/>
+                    <group col='2'>
+                        <group>
+                            <field name='pri_component_id'/>
+                            <field name='no_unit_per_shipp_cartoon'/>
+                            <field name='psc_supplied_by'/>
+                            <field name='psc_notes'/>
+                        </group>
+                        <group>
+                            <field name='psc_package_label' widget="radio" options="{'horizontal': true}"/>
+                            <field name='psc_label_app_details' invisible="psc_package_label == 'not_applicable'"/>
+                            <field name='psc_artwork' invisible="psc_package_label == 'not_applicable'" widget='file'/>
+                        </group>
+                    </group>
+                    <hr/> -->
+                    <!-- <group col='2'>
+                        <group>
+                            <field name='ssc_shipping_carton' widget="radio" options="{'horizontal': true}"/>
+                            <field name='ssc_component_id' invisible="ssc_shipping_carton == 'not_applicable'"/>
+                            <field name='no_psc_per_ssc_shipp_cartoon' invisible="ssc_shipping_carton == 'not_applicable'"/>
+                            <field name='ssc_package_label' widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                        <group>
+                            <field name='no_unit_per_ssc_shipp_cartoon' invisible="ssc_shipping_carton == 'not_applicable'"/>
+                            <field name='ssc_supplied_by' invisible="ssc_shipping_carton == 'not_applicable'"/>
+                            <field name='ssc_artwork' invisible="ssc_shipping_carton == 'not_applicable'" widget='file'/>
+                            <field name='ssc_notes' invisible="ssc_shipping_carton == 'not_applicable'"/>
+                            <field name='sc_app_details' invisible='ssc_package_label == "not_applicable"'/>
+                            <field name='sc_artwork' invisible='ssc_package_label == "not_applicable"'/>
+                        </group>
+                    </group>
+                    <hr/> -->
+                    <group col='2'>
+                        <group>
+                            <field name='additional_components'/>
+                            <field name='add_components' invisible='add_not_applicable'/>
+                        </group>
+                        <group>
+                            <field name='add_not_applicable'/>
+                            <field name='add_supplied_by' invisible='add_not_applicable'/>
+                            <field name='add_notes' invisible='add_not_applicable'/>
+                            <field name='add_artwork' widget='file' invisible='add_not_applicable'/>
+                        </group>
+                    </group>
+                    <hr invisible='not add_components or add_not_applicable'/>
+                    <h5 invisible='not add_components or add_not_applicable'>Additional Components</h5>
+                    <group col='2' string='Tray Case' invisible="add_components != 'tray_case' or add_not_applicable">
+                        <group>
+                            <field name='tc_colour'/>
+                            <field name='tc_logo_colour'/>
+                            <field name='tc_spec_print'/>
+                            <field name='tc_material'/>
+                        </group>
+                        <group>
+                            <field name='tc_size'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='tc_artwork' widget='file'/>
+                            <field name='add_info'/>
+                        </group>
+                    </group>
+                    <group string='Leaflet' invisible="add_components != 'leaflet' or add_not_applicable">
+                        <group>
+                            <field name='leaflet_details'/>
+                            <field name='supplied_by'/>
+                            <field name='supplier'/>
+                            <field name='leaflet_artwork'/>
+                        </group>
+                    </group>
+                    <group string='Component Type' invisible="add_components != 'other' or add_not_applicable">
+                        <group>
+                            <field name='component_type'/>
+                        </group>
+                    </group>
+                    <group col='2' string='Pallet Configurator'>
+                        <group>
+                            <field name='pallet_type'/>
+                            <field name='cartons_per_row'/>
+                            <field name='number_of_rows'/>
+                            <field name='max_pallet_height_cm'/>
+                        </group>
+                        <group>
+                            <field name='corners'/>
+                            <field name='wrapping_colour'/>
+                            <field name='upload_pallet_configurator_pdf' widget='file'/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="cosmo_finished_product_specification_tree">
+      <field name="name">finished.product.specification.tree</field>
+      <field name="model">finished.product.specification</field>
+      <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_finished_product_specification">
+        <field name="name">Finished Product Specification</field>
+        <field name="res_model">finished.product.specification</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem name="Finished Product Specification" id="menu_main_finished_product_specification" web_icon="ehcs_finished_product_specification,static/description/formula_specification.png"/>
+
+    <menuitem name="Finished Product Specification" 
+        id="cosmo_finished_product_specification" 
+        parent="menu_main_finished_product_specification"
+        action="action_finished_product_specification"/>
+
+</odoo>

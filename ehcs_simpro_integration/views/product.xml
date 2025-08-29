@@ -48,6 +48,8 @@
                 <field name="is_contact" invisible='1'/>
                 <field name="is_sites" invisible='1'/>
                 <field name="is_contractor" invisible='1'/>
+                <field name="sites_address_id" invisible='1'/>
+                <field name="site_add_id" invisible='1'/>
                 <field name="simpro_id" invisible='is_sites != True'/>
             </field>
             <xpath expr='//sheet/div[@name="button_box"]' position='inside'>

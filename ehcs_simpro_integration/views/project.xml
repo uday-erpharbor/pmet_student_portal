@@ -5,11 +5,33 @@
         <field name="name">project.project.form.think.plc</field>
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.edit_project"/>
+        <field name="priority" eval='35'/>
         <field name="arch" type="xml">       
             <field name='user_id' position='before'>
-                <field name='x_studio_job_project_type'></field>
-                <field name='think_job_number'></field>
+                <field name='is_customize_proj_create' invisible='1'/>
+                <field name='x_studio_job_project_type'/>
+                <field name='think_job_number'/>
+                <field name='quotes_name' invisible='1'/>
+                <field name='primary_customer'  options="{'no_create': True, 'no_quick_create': True}"/>
             </field>
+            <field name='label_tasks' position='before'>
+                <field name='sale_id' invisible="not is_customize_proj_create"/>
+                <field name='sale_partner_id' invisible="not is_customize_proj_create"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project_kanban_view" model="ir.ui.view">
+        <field name="name">project.kanban.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+           <xpath expr="//kanban/field[1]" position="after" >
+                <field name="quotes_name"/>
+            </xpath>
+            <xpath expr="//kanban/templates/t[@t-name='card']/div/div[hasclass('me-2')]/span[1]" position="after">
+               <b><h4><span class="o_text_overflow" t-if="record.quotes_name.value" t-esc="record.quotes_name.value"/></h4></b>
+            </xpath>
         </field>
     </record>
     

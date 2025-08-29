@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+<!--     <record id="stock_picking_add_button_sign" model="ir.ui.view">
+        <field name="name">documents.document.inherit</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button string="Driver Sign" type="object" name="action_open_sign_wizard"/>
+            </xpath>            
+        </field>
+    </record> -->
+
+</odoo>

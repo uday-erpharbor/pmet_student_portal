@@ -1,9 +1,11 @@
 from odoo import models, fields, api, _
 from datetime import datetime, date
+from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+    _rec_name = 'display_name'
 
     x_studio_job_project_type = fields.Selection([
         ('SE', 'SE Service'),
@@ -17,17 +19,25 @@ class SaleOrder(models.Model):
     ], string='Job / Project Type')
     think_job_number = fields.Char('Job Number',copy=False,readonly=True,default=lambda self: ('')) 
     site_id = fields.Many2one('plc.sites', 'Site', domain="[('customer_id', '=', partner_id)]")
+    assets_id = fields.Many2one('thinkplc.assets', 'Asset', domain="[('site_id', '=', site_id)]")
+    primary_customer = fields.Many2one('res.partner', 'Primary contact', domain=[('type','=','contact'),('is_contact', '=', True)])
+    quote_name = fields.Char()
 
-    # def write(self,vals):
-    #     res = super(SaleOrder, self).write(vals)
-    #     if 'x_studio_job_project_type' in vals:
-    #         for rec in self:
-    #             if rec.state == 'sale':
-    #                 next_seq = self.env['ir.sequence'].next_by_code('think.job.number') or _('')
-    #                 current_year = datetime.now().year
-    #                 t_j_n = self.x_studio_job_project_type
-    #                 self.think_job_number = (f'{t_j_n}{current_year}{next_seq}')        
-    #     return res
+
+    @api.onchange('partner_id')
+    def _onchange_on_partner(self):
+        for rec in self:
+            if rec.partner_id:
+                site = self.env['plc.sites'].search([('customer_id','=',rec.partner_id.id)],limit=1)
+                if site:
+                    rec.site_id = site.id
+
+    def _compute_display_name(self):
+        for order in self:
+            if order.quote_name:
+                order.display_name = f"{order.name} - {order.quote_name}"
+            else:
+                order.display_name = order.name
 
     def action_confirm(self):
         Project = self.env['project.project']
@@ -35,7 +45,7 @@ class SaleOrder(models.Model):
             t_j_n = self.x_studio_job_project_type
             next_seq = self.env['ir.sequence'].next_by_code('think.job.number') or _('')
             current_year = datetime.now().year
-            self.think_job_number = (f'{t_j_n}{current_year}{next_seq}')
+            self.think_job_number = (f'{t_j_n}{self.name[1:]}')
             project_only_sol_count = self.env['sale.order.line'].search_count([
                 ('order_id', '=', self.id),
                 ('product_id.service_tracking', 'in', ['project_only', 'task_in_project']),
@@ -43,14 +53,38 @@ class SaleOrder(models.Model):
             if project_only_sol_count == 0:
                 new_project = Project.create({
                     'name' : self.think_job_number,
-                    'reinvoiced_sale_order_id' : self.id,
-                    'sale_order_id' : self.id,
+                    # 'reinvoiced_sale_order_id' : self.id,
+                    # 'sale_order_id' : self.id,
                     'x_studio_job_project_type' : self.x_studio_job_project_type,
-                    'think_job_number' : self.think_job_number
+                    'think_job_number' : self.think_job_number,
+                    'sale_id' : self.id,
+                    'sale_partner_id' : self.partner_id.id,
+                    'is_customize_proj_create' : True,
+                    'primary_customer' : self.primary_customer.id if self.primary_customer else False,
                     })
                 self.project_id = new_project.id
+        else:
+            raise UserError(_('You cannot confirm a Sale Order without selecting a Job/Project type.'))
+
         res =  super(SaleOrder, self).action_confirm()
+
         return res
+
+    @api.model
+    def create(self, vals):
+        res = super(SaleOrder, self).create(vals)
+        next_seq = self.env['ir.sequence'].next_by_code('think.plc.saleorder') or _('')
+        current_year = datetime.now().year
+        res.write({
+            'name' :(f'S{current_year}{next_seq}')
+            })
+        return res
+
+    @api.depends('site_id')
+    def _compute_partner_shipping_id(self):
+        for order in self:
+            site_add = self.env['res.partner'].search([('site_add_id','=',order.site_id.id)], limit=1)
+            order.partner_shipping_id = site_add.id if order.site_id and site_add else False
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

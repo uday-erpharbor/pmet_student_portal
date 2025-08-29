@@ -22,6 +22,7 @@ class ThinkPcSites(models.Model):
             else:
                 category.complete_name = category.name
 
+
     def _cron_get_simpro_bom_groups(self):
         company_url = self.env['ir.config_parameter'].sudo().get_param('ehcs_simpro_integration.company_url')
         company_id = self.env['ir.config_parameter'].sudo().get_param('ehcs_simpro_integration.company') or 0

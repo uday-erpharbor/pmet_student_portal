@@ -1,4 +1,4 @@
-from odoo import models,fields
+from odoo import models,fields, api
 from random import randint
 from odoo.exceptions import ValidationError
 import requests
@@ -8,7 +8,7 @@ import base64
 class ThinkPcSites(models.Model):
     _name ="plc.sites"
     _description = "Think Sites"
-    _rec_name = 'name'
+    _rec_name = 'display_name'
     _inherit = ['mail.thread']
 
 
@@ -19,7 +19,7 @@ class ThinkPcSites(models.Model):
     x_simpro_site_id = fields.Char('Simpro Site Id')
     zone = fields.Char('Zone')
     city = fields.Char('City')
-    street = fields.Char('Street Address')
+    street = fields.Char('Street Address', required=True)
     street2 = fields.Char('Street Address')
     zip = fields.Char('Zip Code')
     state_id = fields.Many2one('res.country.state', 'State')
@@ -48,7 +48,106 @@ class ThinkPcSites(models.Model):
         column2="con_id",
         string="Contacts",domain=[("is_contact", "!=", False)])
     avatar_128 = fields.Image("Avatar 128",  compute_sudo=True)
+    delivery_address_id = fields.Many2one('res.partner', 'Delivery Address')
 
+
+    @api.depends('name','street','state_id','city','zip')
+    def _compute_display_name(self):
+        for order in self:
+            order.display_name = (f"{order.name if order.name else ''} {order.street if order.street else ''}.{order.city if order.city else ''}, {order.state_id.code if order.state_id else ''} {order.zip if order.zip else ''}")
+
+    @api.model
+    def create(self, vals):
+        res = super(ThinkPcSites, self).create(vals)
+        site_del_add = self.env['res.partner']
+        if vals.get('street'):
+            value = {
+                'name':res.name,
+                'street':res.street,
+                'street2':res.street2,
+                'zip':res.zip,
+                'state_id':res.state_id.id,
+                'country_id':res.country_id.id,
+                'city':res.city,
+                'site_add_id':res.id,
+                }
+            new_site_add = site_del_add.create(value)
+            res.update({
+                'delivery_address_id' : new_site_add.id
+                })
+        if vals.get('customer_id'):
+            customer = self.env['res.partner'].search([('id','=',vals.get('customer_id'))], limit=1) 
+            find_folder = self.env['documents.document'].search([('name','=',customer.name), ('customer_id','=', customer.id), ('active','=', True)])
+            if not find_folder:
+                customer._create_folder_of_customer(customer)
+            customer_folder = self.env['documents.document'].search([
+                ('type', '=', 'folder'),
+                ('customer_id', '=', vals.get('customer_id')),
+                ('name', '=', 'Sites')], limit=1)
+            if customer_folder:
+                site_folder = self.env['documents.document'].create({
+                    'type' : 'folder',
+                    'active' : True,
+                    'name' : vals.get('name'),
+                    'customer_id' : vals.get('customer_id'),
+                    'folder_id' : customer_folder.id,
+                })
+                asset_folder = self.env['documents.document'].create({
+                    'type' : 'folder',
+                    'active' : True,
+                    'name' : 'Assets',
+                    'customer_id' : vals.get('customer_id'),
+                    'folder_id' : site_folder.id,
+                })
+        return res
+
+    def _move_site_folder(self):
+        """Move site folder to new customer's Sites folder"""
+        Document = self.env['documents.document']
+
+        for site in self:
+            if not site.customer_id:
+                continue
+
+            # site folder find kar
+            site_folder = Document.search([
+                ('type', '=', 'folder'),
+                ('name', '=', site.name),
+                ('customer_id', '=', site.id),
+            ], limit=1)
+
+            if site_folder:
+                # new customer ke Sites folder find kar
+                new_customer_folder = Document.search([
+                    ('type', '=', 'folder'),
+                    ('customer_id', '=', site.customer_id.id),
+                    ('name', '=', 'Sites'),
+                ], limit=1)
+
+                if new_customer_folder:
+                    site_folder.write({
+                        'folder_id': new_customer_folder.id,
+                    })
+
+    def write(self, vals):
+        res = super(ThinkPcSites, self).write(vals)
+
+        # Only when customer changes → move site folder
+        if 'customer_id' in vals:
+            self._move_site_folder()
+
+        # If any address-related field changes → update delivery address
+        address_fields = {'street', 'street2', 'zip', 'city', 'name', 'state_id', 'country_id'}
+        if self.delivery_address_id and (address_fields & vals.keys()):
+            updates = {}
+            for field in address_fields:
+                if field in vals:
+                    updates[field] = vals[field]
+            if updates and self.delivery_address_id:
+                self.delivery_address_id.write(updates)
+        return res
+
+#inside code for data fetch--------------------------------------------------------------------------
     def _create_multiple_contacts(self,odoo_site_id,simpro_site_id,company_url,company_id,headers):
         url = f'{company_url}api/v1.0/companies/{company_id}/sites/{simpro_site_id}/contacts/'
         contacts = self.env['res.partner']
@@ -68,7 +167,7 @@ class ThinkPcSites(models.Model):
                     })
 
     def _create_customer_address(self, parent_id, billing_address, country_id):
-        customer = self.env['plc.sites']
+        customer = self.env['res.partner']
         state = self.env['res.country.state']
         state_id = False
         if parent_id.country_id:
@@ -81,9 +180,9 @@ class ThinkPcSites(models.Model):
                 'street' : billing_address.get('Address'),
                 'country_id' : parent_id.country_id.id if parent_id.country_id else False,
                 'state_id' : state_id.id if state_id else False,
-                'parent_id' : parent_id.id,                
+                'site_add_id' : parent_id.id,                
+                'type' : 'delivery',                
             }
-
         parent_customer = customer.create(values)
 
     def _get_attachment_of_asset(self, simpro_assets_id, odoo_new_asset, headers, site_id):
@@ -99,7 +198,7 @@ class ThinkPcSites(models.Model):
             attachments = response.json()
         except Exception as e:
             raise Exception(f"Attachments Fetch Error: {str(e)}")
-
+        print('\n\n attachments',attachments)
         for attachment in attachments:
             attachment_id = attachment.get('ID')
             file_name = attachment.get('Filename')
@@ -153,15 +252,9 @@ class ThinkPcSites(models.Model):
             AssetType = data.get('AssetType')
             asset_id = None
             parent_id = None
-            if data.get('ParentID'):
-                parent_asset = asset.search([('simpro_asset_id','=',data.get('ParentID'))], limit=1)
-                if parent_asset:
-                    parent_asset.write({
-                        'related_asset_id':data.get('ParentID')
-                        })
 
             if AssetType.get('ID') and AssetType.get('Name'):
-                odoo_assets = assets_type.search([('name','=', AssetType.get('Name')), ('simpro_asset_id','=',AssetType.get('ID'))])
+                odoo_assets = assets_type.search([('name','=', AssetType.get('Name')), ('simpro_id','=',AssetType.get('ID'))])
                 if odoo_assets:
                     asset_id = odoo_assets.id
                 else:
@@ -177,9 +270,14 @@ class ThinkPcSites(models.Model):
                 'site_id' : existing_odoo_site.id
                 }
             new_asset = asset.create(value)
+            if data.get('ParentID'):
+                parent_asset = asset.search([('simpro_asset_id','=',data.get('ParentID'))], limit=1)
+                if parent_asset:
+                    parent_asset.write({
+                        'related_asset_id': new_asset.id
+                        })
             self._get_attachment_of_asset(assets_id, new_asset, headers, site_id)
-            print('\n new asset connected to site',new_asset ,'site id: ',existing_odoo_site)
-
+            print('\n New asset created:',new_asset ,'site id: ',existing_odoo_site)
 
     def _cron_get_simpro_sites(self):
         company_url = self.env['ir.config_parameter'].sudo().get_param('ehcs_simpro_integration.company_url')
@@ -286,3 +384,5 @@ class ThinkPcSites(models.Model):
             self._create_multiple_contacts(odoo_site,site_id,company_url,company_id,headers)
             if billing_address.get('Address') or billing_address.get('City'):
                 self._create_customer_address(odoo_site, billing_address, country_id)
+
+

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_item_generate_field,access.item.generate.field,model_item_generate_field,,1,1,1,1
+access_item_generate_field_selection,access.item.generate.field.selection,model_item_generate_field_selection,,1,1,1,1
+access_item.generate.field.value,access.item.generate.field.value,model_item_generate_field_value,,1,1,1,1

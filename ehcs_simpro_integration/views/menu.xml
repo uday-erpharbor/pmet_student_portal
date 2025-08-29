@@ -108,7 +108,7 @@
             parent="sale.sale_menu_root"
             sequence="31"/>
 
-      <menuitem
+      <!-- <menuitem
             id="menu_simpro_customer"
             name="Customers"
             parent="menu_simpro_data_get"
@@ -127,13 +127,13 @@
             name="Vendors"
             parent="menu_simpro_data_get"
             action="think_plc_action_vendors_form"
-            sequence="3"/>
+            sequence="3"/> -->
 
       <menuitem
             id="menu_simpro_contractor"
             name="Contractor"
-            parent="menu_simpro_data_get"
             action="think_plc_action_contractor_form"
+            parent='menu_plc_main_site_menu'
             sequence="4"/>
 
       <!-- <menuitem

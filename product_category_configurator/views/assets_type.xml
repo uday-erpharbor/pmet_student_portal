@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Item Generator Configurator -->
+    <record id="thinkplc_assets_types_configurator_form_view" model="ir.ui.view">
+        <field name="name">thinkplc.assets.configurator.form</field>
+        <field name="model">thinkplc.assets.type</field>
+        <field name="inherit_id" ref="ehcs_simpro_integration.think_plc_assets_type_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position='inside'>
+                <notebook>
+                    <page string="Field Settings" name="field_settings">
+                        <!-- <div class="o-mail-Chatter-top d-print-none top-0">
+                            <button string="Import Options"
+                                name="action_import_options"
+                                type="object"
+                                class="btn-primary"
+                                style="margin-left: 10px;"/>
+                        </div> -->
+                        <field name="item_generate_fields_ids" nolabel="1">
+                            <list string="Custom Field Settings" editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="field_type"/>
+                                <field name="name"/>
+                                <field name="is_required"/>
+                                <!-- <field name="title_sequence" optional="show"/>
+                                <field name="desc_sequence" optional="show"/>
+                                 -->
+                                 <button name="action_configure_options" string="Configure Options"
+                                        type="object" invisible="field_type != 'option'"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Dynamic field form -->
+    <record id="view_item_generate_field_form" model="ir.ui.view">
+        <field name="name">item.generate.field.form</field>
+        <field name="model">item.generate.field</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="product_categery_id" invisible="1"/>
+                    <field name="sequence" invisible="1"/>
+                    <field name="field_type"/>
+                    <field name="name"/>
+                    <field name="length" readonly="1" invisible="field_type not in ['short', 'medium']"/>
+                    <field name="is_required"/>
+                    <field name="title_sequence"/>
+                    <field name="desc_sequence"/>
+                </group>
+                <group string="Selection Field Options" invisible="field_type != 'option'">
+                    <field name="options_ids" nolabel="1">
+                        <list string="Selection Field Options" editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name" string="Option Value"/>
+                        </list>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>
