@@ -9,16 +9,55 @@
             <field name='partner_id' position='attributes'>
                 <attribute name='domain'>['|',('company_id','=',False),('company_id', 'parent_of', [company_id]),'|',('company_id','=',False),('company_id', 'parent_of', ''),('is_customer', '!=', False)]</attribute>
             </field>
-            <field name='payment_term_id' position='after'>
-                <field name='x_studio_job_project_type'></field>
-                <field name='think_job_number'></field>
-                <field name='project_id'></field>
+            <field name='partner_invoice_id' position='attributes'>
+                <attribute name='domain'>['|',('company_id','=',False),('company_id', 'parent_of', [company_id]),'|',('company_id','=',False),('company_id', 'parent_of', ''),('name', '!=', False)]</attribute>
             </field>
-            <field name='partner_shipping_id' position='after'>
-                <field name='site_id'></field>
+            <field name='partner_shipping_id' position='attributes'>
+                <attribute name='domain'>['|',('company_id','=',False),('company_id', 'parent_of', [company_id]),'|',('company_id','=',False),('company_id', 'parent_of', ''),('name', '!=', False)]</attribute>
+            </field>
+            <field name='payment_term_id' position='after'>
+                <field name='x_studio_job_project_type'/>
+                <field name='think_job_number'/>
+                <field name='project_id'/>
+            </field>
+            <field name='partner_invoice_id' position='before'>
+                <field name='site_id'/>
+                <field name='assets_id'/>
+            </field>
+            <xpath expr="//div[hasclass('oe_title')]" position="replace">
+                <div class="oe_title row" style='width:100%;'>
+                    <h1 style='width:23%;'>
+                        <field name="name" readonly="1"/>
+                    </h1>
+                    <h1 style='width:77%;'>
+                        <field name="quote_name" />
+                    </h1>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <field name="name" position="replace">
+                <field name="display_name" string='Number' decoration-bf="1"/>
             </field>
         </field>
     </record>
+    <record id="view_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="replace">
+                <field name="display_name" string='Number' decoration-bf="1"/>
+            </field>
+        </field>
+    </record>
+
 
     <record id="think_plc_inherit_field_sale_order_Sp" model="ir.ui.view">
         <field name="name">sale.order.think.form.view.invisible</field>

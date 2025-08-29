@@ -85,8 +85,27 @@ class ThinkPlcAsset(models.Model):
     safety_password = fields.Char('SAFETY PASSWORD')
 
 
+    @api.model
+    def create(self, vals):
+        res = super(ThinkPcSites, self).create(vals)
+        if vals.get('customer_id'):
+            customer_folder = self.env['documents.document'].search([
+                ('type', '=', 'folder'),
+                ('customer_id', '=', vals.get('customer_id')),
+                ('name', '=', 'Assets')], limit=1)
+            if customer_folder:
+                site_folder = self.env['documents.document'].create({
+                    'type' : 'folder',
+                    'active' : True,
+                    'name' : vals.get('name'),
+                    'customer_id' : res.id,
+                    'folder_id' : customer_folder.id,
+                })
+        return res
+
+
 class ThinkPlcAssetType(models.Model):
     _name = "thinkplc.assets.type"
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name')
     simpro_id = fields.Char('Simpro Id')

@@ -15,3 +15,6 @@ class Project(models.Model):
         ('WA', 'WA Warranty repair'),
     ], string='Job / Project Type')
     think_job_number = fields.Char('Job Number', readonly=True)
+    sale_partner_id = fields.Many2one('res.partner','Customer')
+    sale_id = fields.Many2one('sale.order','Sale order')
+    is_customize_proj_create = fields.Boolean()

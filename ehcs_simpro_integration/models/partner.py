@@ -6,7 +6,7 @@ import base64
 
 class ProductCategory(models.Model):
     _inherit = 'product.category'
-   
+
     x_simpro_group_id = fields.Char(string="Simpro Group ID")
 
 
@@ -284,11 +284,18 @@ class ResPartner(models.Model):
 
     def _compute_sites_count(self):
         for order in self:
-            order.count_sites = self.env['plc.sites'].search_count([('contact_ids', 'in', self.ids)])
+            order.count_sites = 0
+            if order.is_contact:
+                order.count_sites = self.env['plc.sites'].search_count([('contact_ids', 'in', self.ids)])
+            if order.is_customer:
+                order.count_sites = self.env['plc.sites'].search_count([('customer_id', '=', self.id)])
 
     def view_sites(self):
         self.ensure_one()
-        sites_ids = self.env['plc.sites'].search([('contact_ids', 'in', self.id)]).ids
+        if self.is_contact:
+            sites_ids = self.env['plc.sites'].search([('contact_ids', 'in', self.id)]).ids
+        if self.is_customer:
+            sites_ids = self.env['plc.sites'].search([('customer_id', '=', self.id)]).ids
         action = {  
             'res_model': 'plc.sites',
             'type': 'ir.actions.act_window',

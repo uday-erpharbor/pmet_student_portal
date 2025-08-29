@@ -118,6 +118,22 @@
             <field name="padding">3</field>
             <field name="company_id" eval="False"/>
         </record>
+
+        <record id="think_plc_added_field_sale_order_reseq" model="ir.sequence">
+            <field name="name">Think Job Number Sale Order</field>
+            <field name="code">think.plc.saleorder</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="think_plc_create_customer_addresh" model="ir.actions.server">
+            <field name="name">Create Site Address</field>
+            <field name="model_id" ref="model_plc_sites"/>
+            <field name="binding_model_id" ref="model_plc_sites"/>
+            <field name="state">code</field>
+            <field name="code">records.action_create_site_add()</field>
+        </record>
+
     </data>
 
 </odoo>

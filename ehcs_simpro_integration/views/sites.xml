@@ -119,7 +119,14 @@
                             <field name='contact_ids' context="{'default_is_contact': True}"/>
                         </page>
                         <page string="Customer Assets" name="contact_addresses">
-                            <field name='customer_assets_ids'/>
+                            <field name='customer_assets_ids' context="{'default_site_id':id}">
+                                <form>
+                                    <group>
+                                        <field name="asset_type_id"/>
+                                        <field name="related_asset_id"/>
+                                    </group>
+                                </form>
+                            </field>
                         </page>
                     </notebook>
 				</sheet>	

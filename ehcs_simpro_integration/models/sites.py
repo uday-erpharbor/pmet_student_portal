@@ -1,4 +1,4 @@
-from odoo import models,fields
+from odoo import models,fields, api
 from random import randint
 from odoo.exceptions import ValidationError
 import requests
@@ -49,6 +49,72 @@ class ThinkPcSites(models.Model):
         string="Contacts",domain=[("is_contact", "!=", False)])
     avatar_128 = fields.Image("Avatar 128",  compute_sudo=True)
 
+
+    @api.model
+    def create(self, vals):
+
+        res = super(ThinkPcSites, self).create(vals)
+        if vals.get('customer_id'):
+            customer_folder = self.env['documents.document'].search([
+                ('type', '=', 'folder'),
+                ('customer_id', '=', vals.get('customer_id')),
+                ('name', '=', 'Sites')], limit=1)
+            if customer_folder:
+                site_folder = self.env['documents.document'].create({
+                    'type' : 'folder',
+                    'active' : True,
+                    'name' : vals.get('name'),
+                    'customer_id' : res.id,
+                    'folder_id' : customer_folder.id,
+                })
+
+        return res
+
+    def _move_site_folder(self):
+        """Move site folder to new customer's Sites folder"""
+        Document = self.env['documents.document']
+
+        for site in self:
+            if not site.customer_id:
+                continue
+
+            # site folder find kar
+            site_folder = Document.search([
+                ('type', '=', 'folder'),
+                ('name', '=', site.name),
+                ('customer_id', '=', site.id),
+            ], limit=1)
+
+            if site_folder:
+                # new customer ke Sites folder find kar
+                new_customer_folder = Document.search([
+                    ('type', '=', 'folder'),
+                    ('customer_id', '=', site.customer_id.id),
+                    ('name', '=', 'Sites'),
+                ], limit=1)
+
+                if new_customer_folder:
+                    site_folder.write({
+                        'folder_id': new_customer_folder.id,
+                    })
+
+    def write(self, vals):
+        res = super(ThinkPcSites, self).write(vals)
+        if 'customer_id' in vals:   # only when customer change
+            self._move_site_folder()
+        return res
+
+    def action_create_site_add(self):
+        site = self.env['plc.sites'].search([('is_site_address','!=',False)])
+        print('\n\n site',site)
+        print('\n\n len',len(site))
+        for rec in site:
+            print("\n\n site parent id",rec.parent_id.x_simpro_site_id,'sterrt',rec.parent_id.street)
+            # print("\n\n site parent id",rec.x_simpro_site_id)
+
+
+
+#inside code for data fetch--------------------------------------------------------------------------
     def _create_multiple_contacts(self,odoo_site_id,simpro_site_id,company_url,company_id,headers):
         url = f'{company_url}api/v1.0/companies/{company_id}/sites/{simpro_site_id}/contacts/'
         contacts = self.env['res.partner']
@@ -99,7 +165,7 @@ class ThinkPcSites(models.Model):
             attachments = response.json()
         except Exception as e:
             raise Exception(f"Attachments Fetch Error: {str(e)}")
-
+        print('\n\n attachments',attachments)
         for attachment in attachments:
             attachment_id = attachment.get('ID')
             file_name = attachment.get('Filename')
@@ -153,15 +219,9 @@ class ThinkPcSites(models.Model):
             AssetType = data.get('AssetType')
             asset_id = None
             parent_id = None
-            if data.get('ParentID'):
-                parent_asset = asset.search([('simpro_asset_id','=',data.get('ParentID'))], limit=1)
-                if parent_asset:
-                    parent_asset.write({
-                        'related_asset_id':data.get('ParentID')
-                        })
 
             if AssetType.get('ID') and AssetType.get('Name'):
-                odoo_assets = assets_type.search([('name','=', AssetType.get('Name')), ('simpro_asset_id','=',AssetType.get('ID'))])
+                odoo_assets = assets_type.search([('name','=', AssetType.get('Name')), ('simpro_id','=',AssetType.get('ID'))])
                 if odoo_assets:
                     asset_id = odoo_assets.id
                 else:
@@ -177,9 +237,14 @@ class ThinkPcSites(models.Model):
                 'site_id' : existing_odoo_site.id
                 }
             new_asset = asset.create(value)
+            if data.get('ParentID'):
+                parent_asset = asset.search([('simpro_asset_id','=',data.get('ParentID'))], limit=1)
+                if parent_asset:
+                    parent_asset.write({
+                        'related_asset_id': new_asset.id
+                        })
             self._get_attachment_of_asset(assets_id, new_asset, headers, site_id)
-            print('\n new asset connected to site',new_asset ,'site id: ',existing_odoo_site)
-
+            print('\n New asset created:',new_asset ,'site id: ',existing_odoo_site)
 
     def _cron_get_simpro_sites(self):
         company_url = self.env['ir.config_parameter'].sudo().get_param('ehcs_simpro_integration.company_url')
