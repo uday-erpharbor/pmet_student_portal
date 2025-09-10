@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="thinkplc_asset_configurator_form_view" model="ir.ui.view">
+        <field name="name">thinkplc.assets.configurator.form</field>
+        <field name="model">thinkplc.assets</field>
+        <field name="inherit_id" ref="ehcs_simpro_integration.think_plc_assets_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr='//field[@name="asset_type_id"]' position='attributes'>
+                <attribute name='widget'>category_product_many2one</attribute>
+            </xpath>
+            <xpath expr='//field[@name="asset_type_id"]' position='before'>
+                <field name="is_category_configurable" invisible="1"/>        
+                <field name="item_description" invisible="1"/>
+            </xpath>
+            <xpath expr="//sheet" position='inside'>
+                <notebook>
+                <page string="Custom Fields" name="item_generation_fields"
+                      invisible="not is_category_configurable" groups="base.group_no_one">
+                    <field name="item_generate_field_value_ids" readonly="1">
+                        <list editable="bottom">
+                            <field name="item_id" string="Field" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="field_type" string="Type" optional="hide" readonly="1"/>
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

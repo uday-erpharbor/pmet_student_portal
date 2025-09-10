@@ -7,7 +7,7 @@
     'website': "http://www.erpharbor.com",
     'category': 'Uncategorized',
     'version': '18.0.1.0',
-    'depends': ['base','documents','sale_management'],
+    'depends': ['base','documents','sale_management','ehcs_simpro_integration'],
     'data': [
         # 'security/ir.model.access.csv',
         ],

@@ -269,9 +269,13 @@ class ResPartner(models.Model):
     is_vendor = fields.Boolean('Is Vendor')
     is_contact = fields.Boolean('Is Contact')
     is_sites = fields.Boolean('Is Sites')
+    sites_address_id = fields.Char('Sites Address Id')
     is_contractor = fields.Boolean('Is Contractor')
     count_sites = fields.Integer('Helpdesk', compute='_compute_sites_count')
 
+    #this field is define to this cutomer is not customer it's site address
+    site_add_id = fields.Many2one('plc.sites','Site Add')
+    
     # @api.onchange('site_id')
     # def _onchage_on_site_id(self):
     #     for rec in self:
@@ -919,14 +923,6 @@ class ResPartner(models.Model):
             existing = self.env['res.partner'].search([('x_simpro_contact_id', '=', external_id), ('is_contractor','!=', False), ('name', '=', data.get('Name'))], limit=1)
 
             if existing:
-                # if addresh.get('State') and country_id:
-                #     find_state_id = state.search([('code','=',addresh.get('State')), ('country_id','=',country_id.id)])
-                #     if not find_state_id:
-                #         find_state_id = state.search([('name', '=', addresh.get('State')),('country_id', '=', country_id.id)], limit=1)
-                #     if find_state_id:
-                #         existing.write({
-                #             'state_id' : find_state_id.id
-                #             })
                 print("Contractor Already Created",existing)
                 continue
 
@@ -951,4 +947,3 @@ class ResPartner(models.Model):
             ## create customer address
             if primary_contact.get('Email'):
                 self._create_primary_contact(new_contractor.id, primary_contact)
-        

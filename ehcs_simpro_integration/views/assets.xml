@@ -7,6 +7,11 @@
 		<field name="arch" type="xml">
 			<form name="sports">
 				<sheet>
+					<div class="oe_title">
+                        <h3>
+                            <field name="name" class="oe_inline" readonly="1" field_id="name_0"/>
+                        </h3>
+                    </div>
 					<group>
 						<group>
 							<field name="asset_type_id"/>
@@ -41,11 +46,18 @@
 	</record>
 
 	<menuitem 
+		id="main_menu_customer_assets" 
+		name="Assets" 
+        sequence="31"
+        parent='menu_plc_main_site_menu'
+        />
+
+    <menuitem 
 		id="menu_customer_assets" 
 		name="Customer Assets" 
 		action="action_customer_assets" 
-        sequence="31" 
-        parent='menu_simpro_data_get'
+        sequence="31"
+        parent="main_menu_customer_assets"
         />
 
 
@@ -62,7 +74,8 @@
 							<field name="simpro_id"/>
 						</group>
 					</group>
-				</sheet>	
+				</sheet>
+				<chatter/>
 			</form>
 		</field>
 	</record>
@@ -89,7 +102,7 @@
 		name="Assets Type" 
 		action="action_customer_assets_type" 
         sequence="31" 
-        parent='sale.prod_config_main'
+        parent='main_menu_customer_assets'
         />
 
 </odoo>

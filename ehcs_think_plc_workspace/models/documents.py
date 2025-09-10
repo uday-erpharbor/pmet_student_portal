@@ -8,8 +8,6 @@ class Document(models.Model):
  
     @api.model
     def create(self, vals):
-
         res = super(Document, self).create(vals)
-        print('\n\n vals',vals)
-        print('\n\n res',res)
+        
         return res
