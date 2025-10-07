@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ehcs_cosmo_finished_product_specification" model="ir.sequence">
+		<field name="name">Finished Product Specification</field>
+		<field name="code">finished.product.specification</field>
+		<field name="prefix">FPS</field>
+		<field name="padding">4</field>
+		<field name="company_id" eval="False"/>
+	</record>
+
+</odoo>
